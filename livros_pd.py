@@ -26,8 +26,6 @@ def verificarArquivo(arquivo):
     return lista
 
 
-
-# "C:\Users\gabri\Documents\Projetos\TreinoPython\Projeto_Automacao\livros.xlsx"
 # file_path = input("Informe o caminho do arquivo excel: ")
 # print("Caminho informado = {} ".format(file_path))
 
