@@ -11,15 +11,15 @@ def ininicializarDriver():
 def acessarSite(driver):
     driver.get("https://www.amazon.com.br/Livros/b?node=6740748011")
 
-def logar(driver):
-    login = driver.find_element(By.ID,'nav-link-accountList')
-    login.click()
-    email = driver.find_element(By.NAME,'email')
-    email.send_keys('gabrielfeliperm3@gmail.com')
-    email.send_keys(Keys.RETURN)
-    password = driver.find_element(By.NAME,'password')
-    password.send_keys('gati2913')
-    password.send_keys(Keys.RETURN)
+# def logar(driver):
+#     login = driver.find_element(By.ID,'nav-link-accountList')
+#     login.click()
+#     email = driver.find_element(By.NAME,'email')
+#     email.send_keys('emailteste@gmail.com')
+#     email.send_keys(Keys.RETURN)
+#     password = driver.find_element(By.NAME,'password')
+#     password.send_keys('senhateste')
+#     password.send_keys(Keys.RETURN)
 
 def carregarTela(driver):
     while True:
@@ -32,14 +32,25 @@ def carregarTela(driver):
             pass
 
 
-def adicionarPedidos(pedidos,driver):
-    for pedido in pedidos:
+def adicionarPedidos(lista,driver):
+    for index, row in lista.iterrows():
       pesquisa = driver.find_element(By.NAME,'field-keywords')
-      pesquisa.send_keys(pedido)
+      pesquisa.send_keys(row['Livros'])
       pesquisa.send_keys(Keys.RETURN)
 
-      livro = driver.find_element(By.CLASS_NAME,'s-image')
+      #Única parte que falta - preciso selecionar algo que existem em todos html
+      livro = driver.find_element(By.XPATH, f'//img[@class="s-image" and @data-image-index="1"]')
       livro.click()
+
+      while True:
+          try:
+              WebDriverWait(driver,1).until(
+                  EC.element_to_be_clickable((By.NAME,'submit.add-to-cart'))
+              )
+              break
+          except:
+              pass
+  
 
       carrinho = driver.find_element(By.NAME,'submit.add-to-cart')
       carrinho.click()
@@ -56,9 +67,33 @@ def gerarQRCode(driver):
     qrcode = driver.find_element(By.CLASS_NAME,'a-button-input')
     qrcode.click()
 
-# def confirmarPedido(driver):
-#     confirmar = driver.find_element(By.CLASS_NAME,'a-button-text')
-#     confirmar.click()
+def confirmarPedido(driver):
+    while True:
+        try:
+          WebDriverWait(driver,1).until(
+              EC.element_to_be_clickable((By.ID, 'prime-panel-fallback-button'))
+          )
+          break
+        except:
+            pass
+
+    confirmar = driver.find_element(By.ID,'prime-panel-fallback-button')
+    confirmar.click()
+
+def clicarConfirmarPedido(driver):
+    while True:
+        try:
+          WebDriverWait(driver,1).until(
+              EC.element_to_be_clickable((By.ID, 'placeOrder'))
+          )
+          break
+        except:
+            pass
+
+    confirmar = driver.find_element(By.ID,'placeOrder')
+    confirmar.click()
+
+   
 
 
 def encerrar(driver):
